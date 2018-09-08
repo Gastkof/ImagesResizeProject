@@ -1,5 +1,7 @@
 
 
 {
-    "result_folder":"./miniImages"
+    "result_folder":"./miniImages",
+    "692018": "./demoFolder",
+    "tempFolder": "./respond"
 }

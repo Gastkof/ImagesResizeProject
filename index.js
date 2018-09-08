@@ -1,16 +1,54 @@
 
 // const pica = require("pica")();
 const Jimp =require('jimp');
+var Fakerator = require("fakerator");
+var fs = require('fs');
 const settings =require("./settings.json")
 console.log(settings.result_folder)
 
-let from = process.argv[2]
-let to = process.argv[3]
 
+
+ 
+ 
+if (process.argv.length <= 2) {
+    console.log("Usage: " + __filename + " path/to/directory");
+    process.exit(-1);
+}
+ 
+if(!fs.exists("./")){
+
+}
+
+var path = process.argv[2];
+ 
+fs.readdir(path, function(err, from) {
+ 
+  //  console.log("my filez:",from);
+  //  console.log("errrrror:",err);
+    
+ 
+var fakerator =Fakerator();
+
+
+    console.log(from);
+ 
+    for (var i=0; i<from.length; i++) {
+        var name=fakerator.names.name();
+        resize(path+"/"+from[i],200,200,50,"./respond/"+name.toString()+".jpg");
+    }
+
+});
+ 
+
+
+// recive  the width and hight for resize a image  
+// also the quality and the diraction path with the full name of the resize image
+function resize (from,wd,hi,qua,fileNameWithPath){
 Jimp.read(from,(err,to)=>{
     if(err) throw err;
-    to.resize(150,250).quality(50).write("./miniImages/13.jpg");
+    to.resize(wd,hi).quality(qua).write(fileNameWithPath);
 });
+}
 
 
 function func1(a,b,c){
@@ -32,7 +70,6 @@ function func1(a,b,c){
 
 
 
-      //  {"folder":"gargoyle","fieName":"regret"}
         // if( !temp.some((val)=>{ return pathName === val }) ){
         //    console.log("error - no folder recieved "); 
         // }
