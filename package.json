@@ -12,9 +12,14 @@
     "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
     "babelify": "^8.0.0",
+    "directory-exists": "^2.0.0",
+    "file-type": "^9.0.0",
     "formidable": "^1.2.1",
+    "is-image": "^2.0.0",
     "jimp": "^0.4.0",
     "make-dir": "^1.3.0",
+    "path-exists": "^3.0.0",
+    "path-type": "^3.0.0",
     "pica": "^4.1.1"
   }
 }
