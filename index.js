@@ -7,49 +7,62 @@ const settings =require("./settings.json")
 //const findUp = require('find-up');
 const isImage = require('is-image');
 
+const makeDir = require('make-dir');
+
 console.log(settings.result_folder);
 
+//var folder =arguments[0].toString()
+//var destinionFolder= arguments[1].toString()
+var parseFromArgvs = ["--destinionFolder","--folder"]
+var relevantArgvs 
 
- 
- 
-if (process.argv.length <= 2) {
-    console.log("Usage: " + __filename + " path/to/directory");
-    process.exit(-1);
-}
- 
-// if(!fs.exists("./")){
-
-// }
-
-var path = process.argv[2];
-
-function reSize(path){
-
-fs.readdir(path, function(err, from) {
- 
-  //  console.log("my filez:",from);
-  //  console.log("errrrror:",err);
-    
- 
 var fakerator =Fakerator();
 
 
-    console.log(from);
- 
-    for (var i=0; i<from.length; i++) {
-        //check if evrey file is a image
-      if( isImage(path.toString()+"/"+from[i].toString())){
-        var name=fakerator.names.name();
-      
-        resize(path+"/"+from[i],200,200,50,"./respond/"+name.toString()+".jpg");
 
-      }
-   
-    }
 
-})
- 
-};
+let arguments = recievedArguments()
+let ValidationErrors= ValidateArgs(arguments)
+
+if(!ValidationErrors.length){
+    
+    func2(arguments)
+
+}
+
+
+
+//var path = process.argv[2];
+
+function CallreSize(path){
+
+    fs.readdir(path, function(err, from) {
+    
+    //  console.log("my filez:",from);
+    //  console.log("errrrror:",err);
+        
+    
+
+
+    fs.readdir(path, function(err, items) {
+        console.log(items);
+    
+        for (var i=0; i<items.length; i++) {
+            //check if evrey file is a image
+            if( isImage(path.toString()+"/"+from[i].toString())){
+                var name=fakerator.names.name();
+            
+                console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
+                resize(path+"/"+from[i]  ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+".jpg");
+        
+        }
+    
+    
+        }
+
+    })
+    
+})};
 
 // recive  the width and hight for resize a image  
 // also the quality and the diraction path with the full name of the resize image
@@ -57,125 +70,120 @@ function resize (from,wd,hi,qua,fileNameWithPath){
 Jimp.read(from,(err,to)=>{
     if(err) throw err;
     to.resize(wd,hi).quality(qua).write(fileNameWithPath);
+   // to.write("./respond/"+makeDir("orgin").toString())
 });
 }
 
 
-function func1(a,b,c){
+
+//recieves args and starts processing
+function recievedArguments(){
 
    
+    if (process.argv.length <= 2) {
+        console.log("nothing entred");
+        process.exit(-1);
+    }
 
-        var i=0
+    var listOfArguments = process.argv
+    var ArratToCheck = parseFromArgvs
 
-        var listOfArguments = process.argv
+    let result={};
 
-        var ArratToCheck =["demoFolder","respond"]
+    listOfArguments.forEach((val,i,arr)=>{
+          for(var j in ArratToCheck){
+            if(arr[i]===ArratToCheck[j]){
+            
+                result[arr[i].replace("--","")]=arr[i+1]
+            }
+        }
+    })
 
-        let ObjectResult={}
-        ObjectResult = func2(listOfArguments,ArratToCheck) 
-
-            ValidateArgs(ObjectResult)
-
-            console.log("arguments:",JSON.stringify(ObjectResult))
-
-
-
-        // if( !temp.some((val)=>{ return pathName === val }) ){
-        //    console.log("error - no folder recieved "); 
-        // }
-
-        // temp.forEach((val,i,array)=>{
-
-        //     if(val.toLocaleLowerCase() === pathName){
-
-        //         if(array.length === i ){
-          
-        //             console.log("there are no folder enter again")
-                 
-              
-        //         }
-        //         else
-        //         console.log(array[i+1])
-        //     }
-
-
-       // });
-
-    
-         
-        
-
-
+     relevantArgvs =result
+     return result;
 }
 
-function func2(listOfArguments,ArratToCheck){
 
-    let result=[];
+
+function func2(arguments){
+
    
-    listOfArguments.forEach((val,i,arr)=> {
-        
-        try{
-            //check if is the folder name
-            if(arr[i]===ArratToCheck[0]){
-                //check if the string entred is a folder
-            fs.lstatSync("./"+arr[i].toString()).isDirectory()
-            //call a function that resize the pictures
-            reSize("./"+arr[i].toString())
-            }
-       }catch(e){
-          // Handle error
-          if(e.code == 'ENOENT'){
-        console.log("no such thing")
-          }else {
-        
-          }
-       }
+   
+   for(var i in arguments) {
+
+    try{
+        //check if is the folder name
+        if(arguments[i]===("demoFolder")){
+            //check if the string entred is a folder
+      
+
+        //call a function that resize the pictures
+        CallreSize("./"+arguments[i].toString())
+        }
+   }catch(e){
+      // Handle error
+      if(e.code == 'ENOENT'){
+    console.log("no such thing")
+      }else {
+    
+      }
+
+   }
+   
 
 
 
+   // return result
 
-        // for(var j in ArratToCheck){
-        //     if(arr[i]===ArratToCheck[j]){
-        //         let ret = {}
-        //         ret[ArratToCheck[j].toString()] = arr[i+1]
-                
-        //         result.push(ret)
-        //     }
-        // }
-
-    });
-
-    return result
-
+}
 }
 
 
 function ValidateArgs(ObjectResult){
 
-    console.log("who am i what am i :",typeof ObjectResult);
-    
+    console.log("who am i what am i :", ObjectResult);
 
-    ObjectResult.forEach(o=>{
-        console.log("this here obj:",o);
-        
-    })
+    var errorList=[]
 
-
-    // var arr=ObjectResult[Symbol.iterator]
-
-    //     for(var j in arr){
-
-    //         if( !j.some((val)=>{ return arr === val }) ){
-    //             console.log("error - no folder recieved "); 
-
-    //     }
-   
+    for(var i in ObjectResult){
+      
+        if(i==="folder"){
+            try {
+                if(fs.existsSync("./"+ObjectResult[i].toString())){
 
 
-    //      }
+                }
+
+                else{
+                    console.log("source folder dosnt exist")
+                    errorList.push("source folder dosnt exist")
+                    exit
+                }
+            } catch (error) {
+                
+            }
+        if(i === "destinionFolder"){
+            try{
+                if(!fs.existsSync("./"+ObjectResult[i].toString())){
+                    var newFolder =   fs.mkdir(ObjectResult[i])
+
+                }
+                
+
+            }
+            catch (error) {
+                
+            }
+        }
+    }
+
+
+    }
+    return errorList
+
 
 
 }
 
 
-func1()
+
