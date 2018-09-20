@@ -6,6 +6,9 @@ var fs = require('fs');
 const settings =require("./settings.json")
 //const findUp = require('find-up');
 const isImage = require('is-image');
+const imageType = require('image-type');
+
+const readChunk = require('read-chunk');
 
 const makeDir = require('make-dir');
 
@@ -26,7 +29,7 @@ let ValidationErrors= ValidateArgs(arguments)
 
 if(!ValidationErrors.length){
     
-    func2(arguments)
+    HandleArguments(arguments)
 
 }
 
@@ -51,9 +54,9 @@ function CallreSize(path){
             //check if evrey file is a image
             if( isImage(path.toString()+"/"+from[i].toString())){
                 var name=fakerator.names.name();
-            
+                const buffer = readChunk.sync(path+"/"+from[i] , 0, 12);
                 console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
-                resize(path+"/"+from[i]  ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+".jpg");
+                resize(path+"/"+from[i]  ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
         
         }
     
@@ -105,7 +108,7 @@ function recievedArguments(){
 
 
 
-function func2(arguments){
+function HandleArguments(arguments){
 
    
    
