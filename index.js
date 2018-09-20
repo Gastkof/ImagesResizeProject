@@ -22,6 +22,32 @@ var relevantArgvs
 var fakerator =Fakerator();
 
 
+function Menu(){
+
+    console.log("for choose the options")
+    console.log("1 for get a folder")
+    console.log("2 for work with file")
+    console.log("3 for work witch a website")
+    console.log("4 for exit")
+
+
+
+
+    let chooice =1
+
+    switch(chooice){
+
+        case 1:
+        {
+
+      
+        }
+    }
+
+
+
+}
+
 
 
 let arguments = recievedArguments()
@@ -32,8 +58,6 @@ if(!ValidationErrors.length){
     HandleArguments(arguments)
 
 }
-
-
 
 //var path = process.argv[2];
 
