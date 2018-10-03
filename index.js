@@ -1,5 +1,4 @@
 
-const pica = require("pica")();
 const Jimp =require('jimp');
 var Fakerator = require("fakerator");
 var fs = require('fs');
@@ -62,9 +61,6 @@ function Menu(){
 
         case '1':
         
-            // let Folder =prompt("enter the folder name")
-            // ff_result= new ff(Folder);
-            // let destination = prompt("enter the destination folder")
 
 
              arguments = recievedArguments()
