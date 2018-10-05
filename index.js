@@ -1,19 +1,22 @@
 
 const Jimp =require('jimp');
-var Fakerator = require("fakerator");
-var fs = require('fs');
+const Fakerator = require("fakerator");
+const fs = require('fs');
 const settings =require("./settings.json")
 //const findUp = require('find-up');
 const isImage = require('is-image');
 const imageType = require('image-type');
-var filepath = require('filepath');
+const filepath = require('filepath');
 const ifIsImage = require('if-is-image');
 const path = require('path');
 const readChunk = require('read-chunk');
 const locatePath = require('locate-path');
-
+var validator = require('validator');
 const makeDir = require('make-dir');
-var prompt = require('prompt-sync')();
+const prompt = require('prompt-sync')();
+const jsdom = require("jsdom");
+var request = require("request");
+
 
 var ff, ff_result;
  
@@ -22,15 +25,15 @@ ff = require('node-find-folder');
 console.log(settings.result_folder);
 
 
-var parseFromArgvs = ["--destinionFolder","--folder","--file"]
+var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb"]
 var relevantArgvs 
-let arguments
+let arguments = recievedArguments()
+
 let ValidationErrors
 var fakerator =Fakerator();
+let web
 
 Menu()
-
-
 function getCLIInput(){
     let menuCoice = -1;
 
@@ -50,62 +53,51 @@ function getCLIInput(){
 
 }
 
-
 function Menu(){
 
     let choice= getCLIInput()
 
-
-    
     switch(choice){
 
         case '1':
-        
-
-
-             arguments = recievedArguments()
-             ValidationErrors= ValidateArgs(arguments)
+        arguments = recievedArguments()
+             ValidationErrors= ValidateFolder(arguments)
             
             if(!ValidationErrors.length){
                 
                 HandleArguments(arguments)
-            
-            
-      
+        
         }
         break;
         case '2':
-             arguments = recievedArguments()
+        arguments = recievedArguments()
              ValidationErrors= ValidateFile(arguments)
         
               if(!ValidationErrors.length){
             
                 HandleFile(arguments)
-        
-        
   
               }
           break;
-
+          case '3':
+          arguments = recievedArguments()
+          ValidationErrors= ValidateUrl(arguments)
+          
+                if(!ValidationErrors.length){
+              
+                  handelWeb(arguments)
+    
+                }
+            break;
         default:
             console.log("all done")
-
-
     }
 
-
 }
-
-
-
-
 
 function CallreSize(path){
 
     fs.readdir(path, function(err, from) {
-    
- 
-    
 
 
     fs.readdir(path, function(err, items) {
@@ -119,10 +111,9 @@ function CallreSize(path){
                 console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
                 resize(path+"/"+from[i]  ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
         
-        }
+              }
     
-    
-        }
+            }
 
     })
     
@@ -139,21 +130,17 @@ Jimp.read(from,(err,to)=>{
 
 //function that resize one image at a time
 function FileResize(img){
-  
-   
+    
     var p1 = filepath.create(img);
     console.log("got image",p1);
     var p= path.parse(img);
             
     console.log("got image",p);
     var name=fakerator.names.name();
-     //const buffer = readChunk.sync(p1, 0, 12);
     console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
     resize(relevantArgvs.folder+"/"+p.base ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
-
-
 //recieves args and starts processing
 function recievedArguments(){
 
@@ -181,12 +168,9 @@ function recievedArguments(){
      return result;
 }
 
-
 //function that handel all arguments
 function HandleArguments(arguments){
 
-   
-   
    for(var i in arguments) {
 
     try{
@@ -198,146 +182,175 @@ function HandleArguments(arguments){
         //call a function that resize the pictures
         CallreSize("./"+arguments[i].toString())
         }
-
-      
    }catch(e){
       // Handle error
       if(e.code == 'ENOENT'){
-    console.log("no such thing")
+         console.log("no such thing")
       }else {
-    
+        console.error("recieved error while handling arguments: ",e);
+        
       }
-
    }
-   
-
-
-
-   // return result
-
 }
 }
-
 //function that handek one file 
 function HandleFile(arguments){
-    
-    console.log("here bro",arguments);
-    
+        
     for(var i in arguments) {
 
     try{
-        // //check if is the folder name
-        // if(arguments1[i]===("demoFolder")){
-            //     //check if the string entred is a folder
-            
-            
-            // //call a function that resize the pictures
-            // CallreSize("./"+arguments1[i].toString())
-            // }
             console.log(arguments[i].toString())
             console.log("comparison:::::",  arguments[i]==="file.jpg")
             const isIm= ifIsImage(arguments[i].toString());  
             if((isIm)){
-                console.log("n if");
-                
                 FileResize(arguments[i].toString())
             }
        }catch(e){
           // Handle error
-          if(e.code == 'ENOENT'){
-            console.log("no such thing")
-          }else {
-        
-          }
-    
+            console.error("recieved error while handling file: ",e);
        }
-       
-    
-    
-    
-       // return result
-    
+           
     }
 }
+
+//function that handel web
+function handelWeb(arguments){
+
+
+        try{
+
+            request(
+                { uri:arguments.UrlWeb},
+                function(error, response, body) {
+                    console.log(body);
+                    web=body
+                }
+            );
+
+           doc.documentElement.innerHTML = web
+          var r= doc.documentElement.getElementsByTagName('img').src
+          for(var j in r){
+            var imgsrc= r[j]
+
+                        if((isImage(imgsrc))){
+                            FileResize(imgsrc.toString())
+                        }
+          }
+         
+            // JSDOM.fromURL( arguments.UrlWeb, {  url: arguments.UrlWeb+'/',
+            // referrer: arguments.UrlWeb+'/',
+            // contentType: "text/html",
+            // includeNodeLocations: true,
+            // storageQuota: 10000000}).then(dom => {
+            //     console.log(arguments.Url)
+            //     console.log(dom.serialize());
+            //   });
+        //   //  doc.documentElement.innerHTML = arguments.Url.toString();
+
+        //       var web=doc.documentElement.getElementsByTagName('img').src
+        //         for(var j in web){
+        //             var imgsrc= web[i]
+
+        //             if((isImage(imgsrc))){
+        //                 FileResize(imgsrc.toString())
+        //             }
+        //         }
+             
+           }catch(e){
+              // Handle error
+                console.error("recieved error while handling file: ",e);
+           }
+               
+        
+}
+
 //validate of all arguments
-function ValidateArgs(ObjectResult){
-
-    console.log("who am i what am i :", ObjectResult);
-
+function ValidateFolder(parsedArguments){
     var errorList=[]
 
-    for(var i in ObjectResult){
+    for(var i in parsedArguments){
       
         if(i==="folder"){
             try {
-                if(fs.existsSync("./"+ObjectResult[i].toString())){
-
+                if(fs.existsSync("./"+parsedArguments[i].toString())){
 
                 }
-
                 else{
                     console.log("source folder dosnt exist")
                     errorList.push("source folder dosnt exist")
                     exit
                 }
-            } catch (error) {
-                
-            }
-        if(i === "destinionFolder"){
-            try{
-                if(!fs.existsSync("./"+ObjectResult[i].toString())){
-                    var newFolder =   fs.mkdir(ObjectResult[i])
-
-                }
-                
-
-            }
-            catch (error) {
-                
+            } catch (e) {
+                console.error(" there is no folder :",e)
             }
         }
-    }
+        if(i === "destinionFolder"){
+            try{
+                if(!fs.existsSync("./"+parsedArguments[i].toString())){
+                    var newFolder =   fs.mkdir(parsedArguments[i])
 
+                }
 
-    }
+            }
+            catch (e) {
+                console.error("there is no destination folder:  ",e)
+
+            }
+        }
+     }
     return errorList
-
-
 
 }
 //validate of one argument
-
 function ValidateFile(ObjectResult){
 
-    var errorList=[]
-    
-      console.log("test:",ObjectResult,ObjectResult.file,ObjectResult.file==="file.jpg")
-    
+    var errorList=[]    
             try {
                 var filep=filepath.create(ObjectResult.file);
 
                 const isIm= ifIsImage(filep.toString());  
                 console.log(isIm.toString())
-                if(isIm){}
-     
+                if(isIm){
 
+                }
                 else{
                     console.log("file dosnt exist")
                     errorList.push("file dosnt exist")
                     exit
                 }
-            } catch (error) {
-                
+            } catch (e) {
+                console.error(" ",e)
             }
-
-       
-    
-
-
-    
     return errorList
-    
 }
 
+function ValidateUrl(ObjectResult){
 
+    var errorList=[]  
+    
+    for(var i in ObjectResult){
+        console.log("this is my obj ", ObjectResult)
+        if(ObjectResult[i]==='UrlWeb'){
+        
+            try {
+              
 
+                    if(validator.isURL(ObjectResult[i])){
+                        console.log("this is my type ",typeof ObjectResult[i])
+                     
+                    }
+                    else{
+                        console.log("file dosnt exist")
+                        errorList.push("file dosnt exist")
+                        exit
+                    }
+
+                }catch (e) {
+                    console.error(" ",e)
+                }
+              
+            }
+         } 
+    return errorList
+}
+    
