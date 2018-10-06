@@ -17,7 +17,7 @@ const prompt = require('prompt-sync')();
 const jsdom = require("jsdom");
 var request = require("request");
 
-
+var getImgSrc = require('get-img-src')
 var ff, ff_result;
  
 ff = require('node-find-folder');
@@ -31,7 +31,7 @@ let arguments = recievedArguments()
 
 let ValidationErrors
 var fakerator =Fakerator();
-let web
+let web 
 
 Menu()
 function getCLIInput(){
@@ -215,27 +215,49 @@ function HandleFile(arguments){
 
 //function that handel web
 function handelWeb(arguments){
-
+        var webi = []
 
         try{
 
             request(
                 { uri:arguments.UrlWeb},
                 function(error, response, body) {
-                    console.log(body);
-                    web=body
+                  web= body;
+
+                  var htmlTagRe = /<\/img[\w\s="/.':;#-\/\img]+>/gi;
+                  web= body.toString().split(htmlTagRe)
+                      getImgSrc(body.toString(), function(err, imgSrcs) {
+                    console.log(imgSrcs)
+                    webi.push(imgSrcs)
+
+                  }) 
+                 // console.log(web)
+
+                  for(var j in web){
+                      
+             
+                //  var r= getImgSrc()
+                //       //console.log(body[j])
+                //       if(isImage(r)){
+
+                //       }
+                  }
+                  console.log(webi) 
                 }
             );
+         
+ 
+    
 
-           doc.documentElement.innerHTML = web
-          var r= doc.documentElement.getElementsByTagName('img').src
-          for(var j in r){
-            var imgsrc= r[j]
+        //    doc.documentElement.innerHTML = web
+        //   var r= doc.documentElement.getElementsByTagName('img').src
+        //   for(var j in r){
+        //     var imgsrc= r[j]
 
-                        if((isImage(imgsrc))){
-                            FileResize(imgsrc.toString())
-                        }
-          }
+        //                 if((isImage(imgsrc))){
+        //                     FileResize(imgsrc.toString())
+        //                 }
+        //   }
          
             // JSDOM.fromURL( arguments.UrlWeb, {  url: arguments.UrlWeb+'/',
             // referrer: arguments.UrlWeb+'/',
@@ -330,7 +352,7 @@ function ValidateUrl(ObjectResult){
     
     for(var i in ObjectResult){
         console.log("this is my obj ", ObjectResult)
-        if(ObjectResult[i]==='UrlWeb'){
+        if(i==='UrlWeb'){
         
             try {
               
