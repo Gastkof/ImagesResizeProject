@@ -21,15 +21,16 @@ var getImgSrc = require('get-img-src')
 var ff, ff_result;
  
 ff = require('node-find-folder');
+const handler = require('./Handeler')
+const validate = require('./Validate')
 
 console.log(settings.result_folder);
 
 
 var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb"]
-var relevantArgvs 
+  let  relevantArgvs 
 let arguments = recievedArguments()
-
-let ValidationErrors
+let validationErrors
 var fakerator =Fakerator();
 let web 
 
@@ -61,21 +62,21 @@ function Menu(){
 
         case '1':
         arguments = recievedArguments()
-             ValidationErrors= ValidateFolder(arguments)
+             ValidationErrors= validate.ValidateFolder(arguments)
             
             if(!ValidationErrors.length){
                 
-                HandleArguments(arguments)
+               handler.HandleArguments(arguments)
         
         }
         break;
         case '2':
         arguments = recievedArguments()
-             ValidationErrors= ValidateFile(arguments)
+             ValidationErrors= validate.ValidateFile(arguments)
         
               if(!ValidationErrors.length){
             
-                HandleFile(arguments)
+               handler.HandleFile(arguments)
   
               }
           break;
@@ -153,8 +154,8 @@ function recievedArguments(){
     var listOfArguments = process.argv
     var ArratToCheck = parseFromArgvs
 
-    let result={};
-
+   
+  let  result={}
     listOfArguments.forEach((val,i,arr)=>{
           for(var j in ArratToCheck){
             if(arr[i]===ArratToCheck[j]){
@@ -164,54 +165,47 @@ function recievedArguments(){
         }
     })
 
-     relevantArgvs =result
+  relevantArgvs =result
+  module.exports.relevantArgvs=relevantArgvs
      return result;
 }
 
-//function that handel all arguments
-function HandleArguments(arguments){
+module.exports={
+    Menu:Menu,
+    recievedArguments: recievedArguments,
 
-   for(var i in arguments) {
 
-    try{
-        //check if is the folder name
-        if(arguments[i]===("demoFolder")){
-            //check if the string entred is a folder
+
+};
+// module.exports.relevantArgvs=relevantArgvs
+
+// //function that handel all arguments
+// function HandleArguments(arguments){
+
+//    for(var i in arguments) {
+
+//     try{
+//         //check if is the folder name
+//         if(arguments[i]===("demoFolder")){
+//             //check if the string entred is a folder
       
 
-        //call a function that resize the pictures
-        CallreSize("./"+arguments[i].toString())
-        }
-   }catch(e){
-      // Handle error
-      if(e.code == 'ENOENT'){
-         console.log("no such thing")
-      }else {
-        console.error("recieved error while handling arguments: ",e);
+//         //call a function that resize the pictures
+//         CallreSize("./"+arguments[i].toString())
+//         }
+//    }catch(e){
+//       // Handle error
+//       if(e.code == 'ENOENT'){
+//          console.log("no such thing")
+//       }else {
+//         console.error("recieved error while handling arguments: ",e);
         
-      }
-   }
-}
-}
-//function that handek one file 
-function HandleFile(arguments){
-        
-    for(var i in arguments) {
+//       }
+//    }
+// }
+// }
 
-    try{
-            console.log(arguments[i].toString())
-            console.log("comparison:::::",  arguments[i]==="file.jpg")
-            const isIm= ifIsImage(arguments[i].toString());  
-            if((isIm)){
-                FileResize(arguments[i].toString())
-            }
-       }catch(e){
-          // Handle error
-            console.error("recieved error while handling file: ",e);
-       }
-           
-    }
-}
+
 
 //function that handel web
 function handelWeb(arguments){
@@ -286,65 +280,44 @@ function handelWeb(arguments){
         
 }
 
-//validate of all arguments
-function ValidateFolder(parsedArguments){
-    var errorList=[]
+// //validate of all arguments
+// function ValidateFolder(parsedArguments){
+//     var errorList=[]
 
-    for(var i in parsedArguments){
+//     for(var i in parsedArguments){
       
-        if(i==="folder"){
-            try {
-                if(fs.existsSync("./"+parsedArguments[i].toString())){
+//         if(i==="folder"){
+//             try {
+//                 if(fs.existsSync("./"+parsedArguments[i].toString())){
 
-                }
-                else{
-                    console.log("source folder dosnt exist")
-                    errorList.push("source folder dosnt exist")
-                    exit
-                }
-            } catch (e) {
-                console.error(" there is no folder :",e)
-            }
-        }
-        if(i === "destinionFolder"){
-            try{
-                if(!fs.existsSync("./"+parsedArguments[i].toString())){
-                    var newFolder =   fs.mkdir(parsedArguments[i])
+//                 }
+//                 else{
+//                     console.log("source folder dosnt exist")
+//                     errorList.push("source folder dosnt exist")
+//                     exit
+//                 }
+//             } catch (e) {
+//                 console.error(" there is no folder :",e)
+//             }
+//         }
+//         if(i === "destinionFolder"){
+//             try{
+//                 if(!fs.existsSync("./"+parsedArguments[i].toString())){
+//                     var newFolder =   fs.mkdir(parsedArguments[i])
 
-                }
+//                 }
 
-            }
-            catch (e) {
-                console.error("there is no destination folder:  ",e)
+//             }
+//             catch (e) {
+//                 console.error("there is no destination folder:  ",e)
 
-            }
-        }
-     }
-    return errorList
+//             }
+//         }
+//      }
+//     return errorList
 
-}
-//validate of one argument
-function ValidateFile(ObjectResult){
+// }
 
-    var errorList=[]    
-            try {
-                var filep=filepath.create(ObjectResult.file);
-
-                const isIm= ifIsImage(filep.toString());  
-                console.log(isIm.toString())
-                if(isIm){
-
-                }
-                else{
-                    console.log("file dosnt exist")
-                    errorList.push("file dosnt exist")
-                    exit
-                }
-            } catch (e) {
-                console.error(" ",e)
-            }
-    return errorList
-}
 
 function ValidateUrl(ObjectResult){
 

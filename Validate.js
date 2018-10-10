@@ -14,11 +14,15 @@ var fakerator =Fakerator();
 const makeDir = require('make-dir');
 const prompt = require('prompt-sync')();
 console.log(settings.result_folder);
-const index = require('./index')
-var relevantArgvs= index.relevantArgvs;
-var arguments=index.arguments;
-var parseFromArgvs =index.parseFromArgvs;
+//const index = require('./index')
+// var relevantArgvs= index.relevantArgvs;
+// var arguments=index.arguments;
+// var parseFromArgvs =index.parseFromArgvs;
 //validate of all arguments
+
+const index = require('./index')
+const handler = require('./Handeler')
+
 function ValidateFolder(parsedArguments){
     var errorList=[]
 
@@ -78,5 +82,10 @@ function ValidateFile(ObjectResult){
     return errorList
 }
 
-module.exports.ValidateFolder=ValidateFolder;
-module.exports.ValidateFile=ValidateFile;
+module.exports ={
+    ValidateFile: ValidateFile,
+    ValidateFolder :ValidateFolder
+
+} 
+
+
