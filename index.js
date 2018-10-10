@@ -15,7 +15,11 @@ var validator = require('validator');
 const makeDir = require('make-dir');
 const prompt = require('prompt-sync')();
 const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 var request = require("request");
+var stringToDom = require('string-to-dom');
+const dom1 = new JSDOM();
+var HTMLParser = require('node-html-parser');
 
 var getImgSrc = require('get-img-src')
 var ff, ff_result;
@@ -173,9 +177,6 @@ function recievedArguments(){
 module.exports={
     Menu:Menu,
     recievedArguments: recievedArguments,
-
-
-
 };
 // module.exports.relevantArgvs=relevantArgvs
 
@@ -205,12 +206,10 @@ module.exports={
 // }
 // }
 
-
-
 //function that handel web
 function handelWeb(arguments){
         var webi = []
-
+        var rootSRc =[]
         try{
 
             request(
@@ -218,68 +217,31 @@ function handelWeb(arguments){
                 function(error, response, body) {
                   web= body;
 
-                  var htmlTagRe = /<\/img[\w\s="/.':;#-\/\img]+>/gi;
-                  web= body.toString().split(htmlTagRe)
-                      getImgSrc(body.toString(), function(err, imgSrcs) {
-                    console.log(imgSrcs)
-                    webi.push(imgSrcs)
+                  var htmlTagRe = /<\/img[\w\src="/.':;#-\/\img]+>/gi;
+                  var regex = /<img.*?src='(.*?)'/;
 
-                  }) 
-                 // console.log(web)
-
-                  for(var j in web){
-                      
+                  var root = HTMLParser.parse(web);
+                  console.log(root.querySelectorAll('img',root.rawAttrs))
+                    webi.push(root.querySelectorAll(root.rawAttrs))
              
-                //  var r= getImgSrc()
-                //       //console.log(body[j])
-                //       if(isImage(r)){
-
-                //       }
-                  }
+                    for(var ro in webi){
+                        rootSRc.push(webi[ro])
+                        //FileResize(webi[ro].rawAttrs)
+    
+                    }
+          
                   console.log(webi) 
                 }
             );
-         
- 
-    
+        
+            
 
-        //    doc.documentElement.innerHTML = web
-        //   var r= doc.documentElement.getElementsByTagName('img').src
-        //   for(var j in r){
-        //     var imgsrc= r[j]
-
-        //                 if((isImage(imgsrc))){
-        //                     FileResize(imgsrc.toString())
-        //                 }
-        //   }
-         
-            // JSDOM.fromURL( arguments.UrlWeb, {  url: arguments.UrlWeb+'/',
-            // referrer: arguments.UrlWeb+'/',
-            // contentType: "text/html",
-            // includeNodeLocations: true,
-            // storageQuota: 10000000}).then(dom => {
-            //     console.log(arguments.Url)
-            //     console.log(dom.serialize());
-            //   });
-        //   //  doc.documentElement.innerHTML = arguments.Url.toString();
-
-        //       var web=doc.documentElement.getElementsByTagName('img').src
-        //         for(var j in web){
-        //             var imgsrc= web[i]
-
-        //             if((isImage(imgsrc))){
-        //                 FileResize(imgsrc.toString())
-        //             }
-        //         }
-             
            }catch(e){
               // Handle error
                 console.error("recieved error while handling file: ",e);
            }
                
-        
 }
-
 // //validate of all arguments
 // function ValidateFolder(parsedArguments){
 //     var errorList=[]
@@ -317,8 +279,6 @@ function handelWeb(arguments){
 //     return errorList
 
 // }
-
-
 function ValidateUrl(ObjectResult){
 
     var errorList=[]  
@@ -330,7 +290,7 @@ function ValidateUrl(ObjectResult){
             try {
               
 
-                    if(validator.isURL(ObjectResult[i])){
+                    if(validator.isURL(ObjectResult.UrlWeb)){
                         console.log("this is my type ",typeof ObjectResult[i])
                      
                     }
