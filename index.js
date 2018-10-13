@@ -143,7 +143,7 @@ function FileResize(img){
     console.log("got image",p);
     var name=fakerator.names.name();
     console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
-    resize(relevantArgvs.folder+"/"+p.base ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
+    resize(relevantArgvs.UrlWeb+"/"+p.base ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
 //recieves args and starts processing
@@ -222,15 +222,27 @@ function handelWeb(arguments){
 
                   var root = HTMLParser.parse(web);
                   console.log(root.querySelectorAll('img',root.rawAttrs))
-                    webi.push(root.querySelectorAll(root.rawAttrs))
-             
-                    for(var ro in webi){
-                        rootSRc.push(webi[ro])
-                        //FileResize(webi[ro].rawAttrs)
-    
+                    var ssf =root.querySelectorAll(('img'))
+                    var temp =[]
+                    for(var ik in ssf){
+                        temp[ik]=ssf[ik].rawAttrs
+
                     }
+                    rex = /src="?([^"\s]+)"?\s*\/>/g;
+
+                    for(var jol in temp){
+                        webi.push(temp[jol].split(" "))
+                    }
+
+                    var b= webi[0][0].replace('src=','')
+                  console.log(relevantArgvs.UrlWeb+ b.slice(1,b.length-1))
+                  console.log(webi[0][0].replace('',relevantArgvs.UrlWeb))
+
+                    // console.log( )
+                    // console.log( ( rex.exec( temp[0])))
+            
           
-                  console.log(webi) 
+                //   console.log(webi) 
                 }
             );
         
