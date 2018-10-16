@@ -19,6 +19,7 @@ var request = require("request");
 var stringToDom = require('string-to-dom');
 const dom1 = new JSDOM();
 var HTMLParser = require('node-html-parser');
+var download = require('download-file')
 
 var getImgSrc = require('get-img-src')
 var ff, ff_result;
@@ -135,14 +136,14 @@ Jimp.read(from,(err,to)=>{
 //function that resize one image at a time
 function FileResize(img){
     
-    var p1 = filepath.create(img);
-    console.log("got image",p1);
+    // var p1 = filepath.create(img);
+    // console.log("got image",p1);
     var p= path.parse(img);
             
     console.log("got image",p);
     var name=fakerator.names.name();
     console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
-    resize(relevantArgvs.UrlWeb+"/"+p.base ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
+    resize(img ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
 //recieves args and starts processing
@@ -209,6 +210,17 @@ function handelWeb(arguments){
 
                     var b= webi[0][0].replace('src=','')
                   console.log(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
+
+                    
+                    var options = {
+                        directory: "./demoFolder/",
+                        filename: b.toString()
+                                        }
+                    
+                    download(b, options, function(err){
+                        if (err) throw err
+                        console.log("meow")
+                    }) 
                   FileResize(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
 
                  // console.log(webi[0][0].replace('',relevantArgvs.UrlWeb))
