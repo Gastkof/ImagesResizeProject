@@ -15,11 +15,7 @@ var fakerator =Fakerator();
 const makeDir = require('make-dir');
 const prompt = require('prompt-sync')();
 console.log(settings.result_folder);
-//const index = require('./index')
- //const relevantArgvs= index.relevantArgvs;
-// const arguments=index.arguments;
-// const parseFromArgvs =index.parseFromArgvs;
-//function that handel all arguments
+
 const index = require('./index')
 const validate = require('./Validate')
 

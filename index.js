@@ -3,7 +3,6 @@ const Jimp =require('jimp');
 const Fakerator = require("fakerator");
 const fs = require('fs');
 const settings =require("./settings.json")
-//const findUp = require('find-up');
 const isImage = require('is-image');
 const imageType = require('image-type');
 const filepath = require('filepath');
@@ -178,33 +177,7 @@ module.exports={
     Menu:Menu,
     recievedArguments: recievedArguments,
 };
-// module.exports.relevantArgvs=relevantArgvs
 
-// //function that handel all arguments
-// function HandleArguments(arguments){
-
-//    for(var i in arguments) {
-
-//     try{
-//         //check if is the folder name
-//         if(arguments[i]===("demoFolder")){
-//             //check if the string entred is a folder
-      
-
-//         //call a function that resize the pictures
-//         CallreSize("./"+arguments[i].toString())
-//         }
-//    }catch(e){
-//       // Handle error
-//       if(e.code == 'ENOENT'){
-//          console.log("no such thing")
-//       }else {
-//         console.error("recieved error while handling arguments: ",e);
-        
-//       }
-//    }
-// }
-// }
 
 //function that handel web
 function handelWeb(arguments){
@@ -235,8 +208,10 @@ function handelWeb(arguments){
                     }
 
                     var b= webi[0][0].replace('src=','')
-                  console.log(relevantArgvs.UrlWeb+ b.slice(1,b.length-1))
-                  console.log(webi[0][0].replace('',relevantArgvs.UrlWeb))
+                  console.log(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
+                  FileResize(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
+
+                 // console.log(webi[0][0].replace('',relevantArgvs.UrlWeb))
 
                     // console.log( )
                     // console.log( ( rex.exec( temp[0])))
@@ -254,43 +229,7 @@ function handelWeb(arguments){
            }
                
 }
-// //validate of all arguments
-// function ValidateFolder(parsedArguments){
-//     var errorList=[]
 
-//     for(var i in parsedArguments){
-      
-//         if(i==="folder"){
-//             try {
-//                 if(fs.existsSync("./"+parsedArguments[i].toString())){
-
-//                 }
-//                 else{
-//                     console.log("source folder dosnt exist")
-//                     errorList.push("source folder dosnt exist")
-//                     exit
-//                 }
-//             } catch (e) {
-//                 console.error(" there is no folder :",e)
-//             }
-//         }
-//         if(i === "destinionFolder"){
-//             try{
-//                 if(!fs.existsSync("./"+parsedArguments[i].toString())){
-//                     var newFolder =   fs.mkdir(parsedArguments[i])
-
-//                 }
-
-//             }
-//             catch (e) {
-//                 console.error("there is no destination folder:  ",e)
-
-//             }
-//         }
-//      }
-//     return errorList
-
-// }
 function ValidateUrl(ObjectResult){
 
     var errorList=[]  

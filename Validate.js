@@ -2,7 +2,6 @@ const Jimp =require('jimp');
 const Fakerator = require("fakerator");
 const fs = require('fs');
 const settings =require("./settings.json")
-//const findUp = require('find-up');
 const isImage = require('is-image');
 const imageType = require('image-type');
 const filepath = require('filepath');
@@ -14,11 +13,7 @@ var fakerator =Fakerator();
 const makeDir = require('make-dir');
 const prompt = require('prompt-sync')();
 console.log(settings.result_folder);
-//const index = require('./index')
-// var relevantArgvs= index.relevantArgvs;
-// var arguments=index.arguments;
-// var parseFromArgvs =index.parseFromArgvs;
-//validate of all arguments
+
 
 const index = require('./index')
 const handler = require('./Handeler')
