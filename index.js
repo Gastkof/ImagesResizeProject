@@ -21,8 +21,8 @@ const dom1 = new JSDOM();
 var HTMLParser = require('node-html-parser');
 var download = require('download-file')
 
-var getImgSrc = require('get-img-src')
-var ff, ff_result;
+// var getImgSrc = require('get-img-src')
+// var ff, ff_result;
  
 ff = require('node-find-folder');
 const handler = require('./Handeler')
