@@ -19,7 +19,8 @@ var request = require("request");
 var stringToDom = require('string-to-dom');
 const dom1 = new JSDOM();
 var HTMLParser = require('node-html-parser');
-var download = require('download-file')
+// var download = require('download-file')
+const download = require('image-downloader')
 
 // var getImgSrc = require('get-img-src')
 // var ff, ff_result;
@@ -136,8 +137,8 @@ Jimp.read(from,(err,to)=>{
 //function that resize one image at a time
 function FileResize(img){
     
-    // var p1 = filepath.create(img);
-    // console.log("got image",p1);
+     var p1 = filepath.create(img);
+     console.log("got image",p1);
     var p= path.parse(img);
             
     console.log("got image",p);
@@ -195,10 +196,11 @@ function handelWeb(arguments){
                   var regex = /<img.*?src='(.*?)'/;
 
                   var root = HTMLParser.parse(web);
-                  console.log(root.querySelectorAll('img',root.rawAttrs))
+                //   console.log(root.querySelectorAll('img',root.rawAttrs))
                     var ssf =root.querySelectorAll(('img'))
                     var temp =[]
                     for(var ik in ssf){
+                        // if(temp[ik]=ssf[ik].rawAttrs)
                         temp[ik]=ssf[ik].rawAttrs
 
                     }
@@ -208,29 +210,29 @@ function handelWeb(arguments){
                         webi.push(temp[jol].split(" "))
                     }
 
-                    var b= webi[0][0].replace('src=','')
-                  console.log(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
 
-                    
-                    var options = {
-                        directory: "./demoFolder/",
-                        filename: b.toString()
-                                        }
-                    
-                    download(b, options, function(err){
-                        if (err) throw err
-                        console.log("meow")
-                    }) 
-                  FileResize(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
-
-                 // console.log(webi[0][0].replace('',relevantArgvs.UrlWeb))
-
-                    // console.log( )
-                    // console.log( ( rex.exec( temp[0])))
-            
-          
-                //   console.log(webi) 
-                }
+                            var b= webi[0][0].replace('src=','')
+                             console.log(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
+                        
+                                                   
+                            //   console.log ( "this my type", p)
+                              const options = {
+                                url: relevantArgvs.UrlWeb+b.slice(1,b.length-1),
+                                dest: "./demoFolder"  // Save to /path/to/dest/image.jpg
+                              }
+                               
+                              download.image(options)
+                                .then(({ filename, image }) => {
+                                    FileResize(filename)
+                                  console.log('File saved to', filename)
+                                })
+                                .catch((err) => {
+                                  console.error(err)
+                                })
+                            
+                        
+         
+                    }
             );
         
             

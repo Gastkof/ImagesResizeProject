@@ -20,6 +20,7 @@
     "formidable": "^1.2.1",
     "get-img-src": "^1.0.0",
     "if-is-image": "^1.0.6",
+    "image-downloader": "^3.4.1",
     "image-type": "^3.0.0",
     "is-image": "^2.0.0",
     "is-url": "^1.2.4",
