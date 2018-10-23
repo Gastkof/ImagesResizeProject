@@ -184,7 +184,6 @@ module.exports={
 //function that handel web
 function handelWeb(arguments){
         var webi = []
-        var rootSRc =[]
         try{
 
             request(
@@ -195,19 +194,20 @@ function handelWeb(arguments){
                   var htmlTagRe = /<\/img[\w\src="/.':;#-\/\img]+>/gi;
                   var regex = /<img.*?src='(.*?)'/;
 
+                  //the root of the web page  
                   var root = HTMLParser.parse(web);
                 //   console.log(root.querySelectorAll('img',root.rawAttrs))
-                    var ssf =root.querySelectorAll(('img'))
-                    var temp =[]
-                    for(var ik in ssf){
-                        // if(temp[ik]=ssf[ik].rawAttrs)
-                        temp[ik]=ssf[ik].rawAttrs
+                    var splitArrayOfSrc =root.querySelectorAll(('img'))
+                    var rawSrc =[]
+                    for(var src in splitArrayOfSrc ){
+                    
+                        rawSrc[src]=splitArrayOfSrc[src].rawAttrs
 
                     }
                     rex = /src="?([^"\s]+)"?\s*\/>/g;
 
-                    for(var jol in temp){
-                        webi.push(temp[jol].split(" "))
+                    for(var j in rawSrc){
+                        webi.push(rawSrc[j].split(" "))
                     }
 
 
