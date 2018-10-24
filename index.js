@@ -210,7 +210,8 @@ function handelWeb(arguments){
                         webi.push(rawSrc[j].split(" "))
                     }
 
-
+                        console.log("this is my type", typeof webi)
+                        console.log("my data", webi)
                             var b= webi[0][0].replace('src=','')
                              console.log(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
                         
@@ -235,7 +236,7 @@ function handelWeb(arguments){
                     }
             );
         
-            
+            handler.HandleArguments(arguments)
 
            }catch(e){
               // Handle error
