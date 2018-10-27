@@ -8,4 +8,4 @@ for all images / image size is aggregated according to the input width and lengt
 The width will be a default of 200
 <br>
 
-The length will be a default of 200
+The Hight will be a default of 200
