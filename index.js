@@ -1,152 +1,98 @@
 
-const Jimp =require('jimp');
-const Fakerator = require("fakerator");
-const fs = require('fs');
 const settings =require("./settings.json")
-const isImage = require('is-image');
-const imageType = require('image-type');
-const filepath = require('filepath');
-const ifIsImage = require('if-is-image');
-const path = require('path');
-const readChunk = require('read-chunk');
-const locatePath = require('locate-path');
-var validator = require('validator');
-const makeDir = require('make-dir');
 const prompt = require('prompt-sync')();
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-var request = require("request");
-var stringToDom = require('string-to-dom');
-const dom1 = new JSDOM();
-var HTMLParser = require('node-html-parser');
-// var download = require('download-file')
-const download = require('image-downloader')
-
-// var getImgSrc = require('get-img-src')
-// var ff, ff_result;
- 
 ff = require('node-find-folder');
 const handler = require('./Handeler')
 const validate = require('./Validate')
-
 console.log(settings.result_folder);
 
+var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb","--Wd","--Hi"]
 
-var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb"]
-  let  relevantArgvs 
+let  relevantArgvs 
 let arguments = recievedArguments()
-let validationErrors
-var fakerator =Fakerator();
-let web 
 
+let validationErrors
+
+// default  width  and hight 
+function loadDef(hi,wd){
+
+    if (typeof relevantArgvs.Wd==='undefined') relevantArgvs['Wd']= 200;
+    if (typeof  relevantArgvs.Hi==='undefined') relevantArgvs['Hi'] =200;
+    if (typeof  relevantArgvs.Hi==='undefined' && typeof relevantArgvs.Wd!=='undefined') relevantArgvs['Hi'] =200;
+    if (typeof  relevantArgvs.Wd==='undefined' && typeof relevantArgvs.Hi!=='undefined') relevantArgvs['Hi'] =200;
+
+}
 Menu()
+//prints the menu options 
+//get the choose by user
 function getCLIInput(){
     let menuCoice = -1;
 
     console.log("for choose the options")
     console.log("1 for get a folder")
     console.log("2 for work with file")
-    console.log("3 for work witch a website")
-    console.log("4 for exit")
+    console.log("3 for exit")
     console.log("**********************")
     menuCoice =prompt("enter your chooise:")
 
-    if(menuCoice === 4)  exit;
+    if(menuCoice === 3)  exit;
 
-    if (menuCoice>0 && menuCoice < 4)   return menuCoice
+    if (menuCoice>0 && menuCoice < 3)   return menuCoice
 
     if(menuCoice<0)  return getCLIInput()
-
 }
-
+//the menu function 
 function Menu(){
 
+    //activate the print menu and the choosing option
     let choice= getCLIInput()
 
+    //by reciving a number by user 
     switch(choice){
-
+        //case 1 is for working with folder
         case '1':
-        arguments = recievedArguments()
-             ValidationErrors= validate.ValidateFolder(arguments)
+            arguments = recievedArguments()
+            ValidationErrors= validate.ValidateFolder(arguments)
             
             if(!ValidationErrors.length){
-                
+                loadDef()
+
                handler.HandleArguments(arguments)
         
-        }
-        break;
+             }
+             break;
+        //case 2 is for working with one file 
+
         case '2':
-        arguments = recievedArguments()
+             arguments = recievedArguments()
              ValidationErrors= validate.ValidateFile(arguments)
         
-              if(!ValidationErrors.length){
+                if(!ValidationErrors.length){
             
+                loadDef()
+
+
                handler.HandleFile(arguments)
   
-              }
-          break;
-          case '3':
-          arguments = recievedArguments()
-          ValidationErrors= ValidateUrl(arguments)
+                 }
+             break;
+        //   case '3':
+        //   arguments = recievedArguments()
+        //   ValidationErrors= ValidateUrl(arguments)
           
-                if(!ValidationErrors.length){
+        //         if(!ValidationErrors.length){
               
-                  handelWeb(arguments)
+        //           handelWeb(arguments)
     
-                }
-            break;
+        //         }
+        //     break;
         default:
             console.log("all done")
     }
 
 }
 
-function CallreSize(path){
 
-    fs.readdir(path, function(err, from) {
-
-
-    fs.readdir(path, function(err, items) {
-        console.log(items);
-    
-        for (var i=0; i<items.length; i++) {
-            //check if evrey file is a image
-            if( isImage(path.toString()+"/"+from[i].toString())){
-                var name=fakerator.names.name();
-                const buffer = readChunk.sync(path+"/"+from[i] , 0, 12);
-                console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
-                resize(path+"/"+from[i]  ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
-        
-              }
-    
-            }
-
-    })
-    
-})};
-
-// recive  the width and hight for resize a image  
-// also the quality and the diraction path with the full name of the resize image
-function resize (from,wd,hi,qua,fileNameWithPath){
-Jimp.read(from,(err,to)=>{
-    if(err) throw err;
-    to.resize(wd,hi).quality(qua).write(fileNameWithPath);
-});
-}
-
-//function that resize one image at a time
-function FileResize(img){
-    
-     var p1 = filepath.create(img);
-     console.log("got image",p1);
-    var p= path.parse(img);
-            
-    console.log("got image",p);
-    var name=fakerator.names.name();
-    console.log("destination argv ",relevantArgvs.destinionFolder, 'all argvs',relevantArgvs)
-    resize(img ,200,200,50,"./"+relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
-
-}
 //recieves args and starts processing
 function recievedArguments(){
 
@@ -171,6 +117,7 @@ function recievedArguments(){
     })
 
   relevantArgvs =result
+
   module.exports.relevantArgvs=relevantArgvs
      return result;
 }
@@ -181,97 +128,3 @@ module.exports={
 };
 
 
-//function that handel web
-function handelWeb(arguments){
-        var webi = []
-        try{
-
-            request(
-                { uri:arguments.UrlWeb},
-                function(error, response, body) {
-                  web= body;
-
-                  var htmlTagRe = /<\/img[\w\src="/.':;#-\/\img]+>/gi;
-                  var regex = /<img.*?src='(.*?)'/;
-
-                  //the root of the web page  
-                  var root = HTMLParser.parse(web);
-                //   console.log(root.querySelectorAll('img',root.rawAttrs))
-                    var splitArrayOfSrc =root.querySelectorAll(('img'))
-                    var rawSrc =[]
-                    for(var src in splitArrayOfSrc ){
-                    
-                        rawSrc[src]=splitArrayOfSrc[src].rawAttrs
-
-                    }
-                    rex = /src="?([^"\s]+)"?\s*\/>/g;
-
-                    for(var j in rawSrc){
-                        webi.push(rawSrc[j].split(" "))
-                    }
-
-                        console.log("this is my type", typeof webi)
-                        console.log("my data", webi)
-                            var b= webi[0][0].replace('src=','')
-                             console.log(relevantArgvs.UrlWeb+b.slice(1,b.length-1))
-                        
-                                                   
-                            //   console.log ( "this my type", p)
-                              const options = {
-                                url: relevantArgvs.UrlWeb+b.slice(1,b.length-1),
-                                dest: "./demoFolder"  // Save to /path/to/dest/image.jpg
-                              }
-                               
-                              download.image(options)
-                                .then(({ filename, image }) => {
-                                    FileResize(filename)
-                                  console.log('File saved to', filename)
-                                })
-                                .catch((err) => {
-                                  console.error(err)
-                                })
-                            
-                        
-         
-                    }
-            );
-        
-            handler.HandleArguments(arguments)
-
-           }catch(e){
-              // Handle error
-                console.error("recieved error while handling file: ",e);
-           }
-               
-}
-
-function ValidateUrl(ObjectResult){
-
-    var errorList=[]  
-    
-    for(var i in ObjectResult){
-        console.log("this is my obj ", ObjectResult)
-        if(i==='UrlWeb'){
-        
-            try {
-              
-
-                    if(validator.isURL(ObjectResult.UrlWeb)){
-                        console.log("this is my type ",typeof ObjectResult[i])
-                     
-                    }
-                    else{
-                        console.log("file dosnt exist")
-                        errorList.push("file dosnt exist")
-                        exit
-                    }
-
-                }catch (e) {
-                    console.error(" ",e)
-                }
-              
-            }
-         } 
-    return errorList
-}
-    

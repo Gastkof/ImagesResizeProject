@@ -3,17 +3,14 @@ const Jimp =require('jimp');
 const Fakerator = require("fakerator");
 const fs = require('fs');
 const settings =require("./settings.json")
-//const findUp = require('find-up');
 const isImage = require('is-image');
 const imageType = require('image-type');
 const filepath = require('filepath');
 const ifIsImage = require('if-is-image');
 const path = require('path');
 const readChunk = require('read-chunk');
-// const locatePath = require('locate-path');
 var fakerator =Fakerator();
-// const makeDir = require('make-dir');
-// const prompt = require('prompt-sync')();
+
 console.log(settings.result_folder);
 
 const index = require('./index')
@@ -78,7 +75,8 @@ function HandleFile(arguments){
                 var name=fakerator.names.name();
                 const buffer = readChunk.sync(path+"/"+from[i] , 0, 12);
                 console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
-                resize(path+"/"+from[i]  ,200,200,50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
+                console.log("this is my type",typeof index.relevantArgvs.Wd )
+                resize(path+"/"+from[i]  ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
         
               }
     
@@ -107,7 +105,11 @@ function FileResize(img){
     console.log("got image",p);
     var name=fakerator.names.name();
  //   console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
-    resize(index.relevantArgvs.folder+"/"+p.base ,200,200,50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
+
+ 
+
+
+    resize(index.relevantArgvs.folder+"/"+p.base ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
 module.exports ={

@@ -1,22 +1,15 @@
-    // const Jimp =require('jimp');
 const Fakerator = require("fakerator");
 const fs = require('fs');
 const settings =require("./settings.json")
-// const isImage = require('is-image');
-// const imageType = require('image-type');
+
 const filepath = require('filepath');
 const ifIsImage = require('if-is-image');
-// const path = require('path');
-// const readChunk = require('read-chunk');
-// const locatePath = require('locate-path');
-// var fakerator =Fakerator();
-// const makeDir = require('make-dir');
-// const prompt = require('prompt-sync')();
+
 console.log(settings.result_folder);
 
 
-// const index = require('./index')
-// const handler = require('./Handeler')
+
+
 
 function ValidateFolder(parsedArguments){
     var errorList=[]
