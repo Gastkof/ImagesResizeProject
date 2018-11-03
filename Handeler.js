@@ -74,9 +74,13 @@ function HandleFile(arguments){
             if( isImage(path.toString()+"/"+from[i].toString())){
                 var name=fakerator.names.name();
                 const buffer = readChunk.sync(path+"/"+from[i] , 0, 12);
+                console.log("a deo",from[i])
                 console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
                 console.log("this is my type",typeof index.relevantArgvs.Wd )
-                resize(path+"/"+from[i]  ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
+                console.log("this a demo",name.toString()+"."+imageType(buffer).ext)
+                // resize(path+"/"+from[i]  ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
+
+                resize(path+"/"+from[i]  ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),100,"./"+index.relevantArgvs.destinionFolder+"/"+from[i]);
         
               }
     
@@ -109,7 +113,7 @@ function FileResize(img){
  
 
 
-    resize(index.relevantArgvs.folder+"/"+p.base ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
+    resize(index.relevantArgvs.folder+"/"+p.base ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),100,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
 module.exports ={
