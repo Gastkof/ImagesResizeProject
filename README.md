@@ -29,11 +29,17 @@ node index.js --folder origin --destinionFolder destination
 there is a menue for user choice:
 
 for choose the options
+<br>
 1 for get a folder
+<br>
 2 for work with file
+<br>
 3 for exit
+<br>
 **********************
+<br>
 enter your chooise:
+<br>
 
 
 if 1 was choosen by user :
