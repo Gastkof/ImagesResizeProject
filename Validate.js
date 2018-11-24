@@ -1,9 +1,12 @@
 const Fakerator = require("fakerator");
 const fs = require('fs');
 const settings =require("./settings.json")
+const path = require('path');
+ff = require('node-find-folder');
 
 const filepath = require('filepath');
 const ifIsImage = require('if-is-image');
+const index = require('./index')
 
 console.log(settings.result_folder);
 
@@ -14,11 +17,20 @@ console.log(settings.result_folder);
 function ValidateFolder(parsedArguments){
     var errorList=[]
 
+    //thii is the problem
+    var filep = path.resolve(parsedArguments.folder)
+    
+   //=filepath.create(parsedArguments.folder)
+    console.log(filep)
+    ff = new ff(filep);
+    console.log(ff);
+
     for(var i in parsedArguments){
       
         if(i==="folder"){
             try {
-                if(fs.existsSync("./"+parsedArguments[i].toString())){
+            
+                if(fs.existsSync(filep.path.toString())){
 
                 }
                 else{

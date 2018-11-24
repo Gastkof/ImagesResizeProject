@@ -10,6 +10,7 @@ const ifIsImage = require('if-is-image');
 const path = require('path');
 const readChunk = require('read-chunk');
 var fakerator =Fakerator();
+var ff = require('node-find-folder');
 
 console.log(settings.result_folder);
 
@@ -23,12 +24,13 @@ function HandleArguments(arguments){
  
      try{
          //check if is the folder name
-         if(arguments[i]===("demoFolder")){
+         if(arguments[i]===arguments.folder){
              //check if the string entred is a folder
-       
- 
+             ff = new ff(arguments.folder);
+             var filep=filepath.create(ff)
+
          //call a function that resize the pictures
-         CallreSize("./"+arguments[i].toString())
+         CallreSize(filep.path.toString())
          }
     }catch(e){
        // Handle error
@@ -67,9 +69,9 @@ function HandleFile(arguments){
 
 
     fs.readdir(path, function(err, items) {
-        console.log(items);
+        console.log(path);
     
-        for (var i=0; i<items.length; i++) {
+        for (var i; i<items.lengh; i++) {
             //check if evrey file is a image
             if( isImage(path.toString()+"/"+from[i].toString())){
                 var name=fakerator.names.name();
@@ -108,12 +110,12 @@ function FileResize(img){
             
     console.log("got image",p);
     var name=fakerator.names.name();
- //   console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
+  console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
 
  
 
 
-    resize(index.relevantArgvs.folder+"/"+p.base ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),100,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
+    resize(index.relevantArgvs.folder+"/"+p.base ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
 module.exports ={

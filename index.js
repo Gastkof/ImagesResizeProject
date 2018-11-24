@@ -22,6 +22,7 @@ function loadDef(hi,wd){
     if (typeof  relevantArgvs.Wd==='undefined' && typeof relevantArgvs.Hi!=='undefined') relevantArgvs['Hi'] =200;
 
 }
+
 Menu()
 //prints the menu options 
 //get the choose by user
