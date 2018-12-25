@@ -12,21 +12,22 @@ var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb","--Wd
 
 
 let  relevantArgvs 
-let arguments = recievedArguments()
+// let arguments = recievedArguments()
+main();
 
 
 function main(){
     let enteredArgs = recievedArguments()
     enteredArgs = preValidation(enteredArgs)
     let ValidationErrors= validate.ValidateFolder(enteredArgs);
-    if(ValidationErrors) console.log("validation errors:",ValidationErrors)  //TODO  some error handling
-    loadDef(enteredArgs)
 
-    if (enteredArgs.nofile)  handler.HandleArguments(enteredArgs)
-    if (!enteredArgs.nofile) handler.HandleFile(enteredArgs)
+    if(ValidationErrors)
+     console.log("validation errors:",ValidationErrors)  //TODO  some error handling
+    loadDef(enteredArgs)
+    if (!enteredArgs.nofile)  handler.HandleArguments(enteredArgs)
+    if (enteredArgs.nofile) handler.HandleFile(enteredArgs)
 }
 
-main();
 
 
 //recieves args and starts processing
@@ -63,7 +64,7 @@ function preValidation(args){
     if(!Boolean(args.folder))  args.folder = readlineSync.question("Type source Folder (default "+ settings.folder +"): ");
     if(!Boolean(args.destinionFolder))  args.destinionFolder = readlineSync.question("Type destinion Folder (default "+ settings.destinionFolder +"): ");
     // TODO: check when file is empty 
-    if(!Boolean(args.file) && !Boolean(args.nofile) )  args.folder = readlineSync.question("Type source Folder (default "+ settings.orgin+"): ");
+  //  if(!Boolean(args.file) && !Boolean(args.nofile) )  args.nofile =null //readlineSync.question("Type source Folder (default "+ settings.nofile+"): ");
 
     return args;
   

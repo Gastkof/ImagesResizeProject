@@ -39,6 +39,7 @@ function ValidateFolder(parsedArguments){
                 }
             } catch (e) {
                 console.error(" there is no folder :",e)
+                errorList.push(e)
             }
         }
         if(i === "destinionFolder"){
@@ -51,6 +52,7 @@ function ValidateFolder(parsedArguments){
             }
             catch (e) {
                 console.error("there is no destination folder:  ",e)
+                errorList.push(e)
 
             }
         }
@@ -77,6 +79,7 @@ function ValidateFile(ObjectResult){
                 }
             } catch (e) {
                 console.error(" ",e)
+                errorList.push(e)
             }
     return errorList
 }

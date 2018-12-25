@@ -5,6 +5,8 @@
     "692018": "./demoFolder",
     "tempFolder": "./respond",
     "destinionFolder": "./destination",
-    "folder":"./orgin"
+    "folder":"./orgin",
+    "nofile": "nofile"
+
     
 }

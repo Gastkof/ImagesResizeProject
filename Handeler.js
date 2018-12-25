@@ -21,12 +21,12 @@ function HandleArguments(arguments){
  
      try{
          //check if is the folder name
-         if(arguments[i]===("orgin")){
+         if(arguments.folder===("orgin")){
              //check if the string entred is a folder
-     
-
+            
+            //    console.log(baseName.base)
          //call a function that resize the pictures
-         CallreSize("./"+arguments[i].toString())
+         CallreSize("./"+arguments.folder)
          }
     }catch(e){
        // Handle error
@@ -45,8 +45,8 @@ function HandleFile(arguments){
     for(var i in arguments) {
 
     try{
-            console.log(arguments[i].toString())
-            console.log("comparison:::::",  arguments[i]==="file.jpg")
+            console.log("this",arguments[i].toString())
+            //  console.log("comparison:::::",  arguments[i]===arguments[i].toString())
             const isIm= ifIsImage(arguments[i].toString());  
             if((isIm)){
                 FileResize(arguments[i].toString())
@@ -65,13 +65,14 @@ function HandleFile(arguments){
 
 
     fs.readdir(path, function(err, items) {
-        console.log(path);
-    
+        // console.log(path);
         for (var i; i<items.lengh; i++) {
+           // console.log (from[i].toString)
             //check if evrey file is a image
-            if( isImage(path.toString()+"/"+from[i].toString())){
-                var name=fakerator.names.name();
-                const buffer = readChunk.sync(path+"/"+from[i] , 0, 12);
+            console.log(items[i].toString())
+            if( isImage(path.toString()+"/"+items[i].toString())){
+                //var name=fakerator.names.name();
+              //  const buffer = readChunk.sync(path+"/"+from[i] , 0, 12);
                 console.log("a deo",from[i])
                 console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
                 console.log("this is my type",typeof index.relevantArgvs.Wd )
@@ -86,7 +87,7 @@ function HandleFile(arguments){
 
     })
     
-})};
+});}
 
 // recive  the width and hight for resize a image  
 // also the quality and the diraction path with the full name of the resize image
