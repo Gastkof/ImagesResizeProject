@@ -4,26 +4,82 @@ const prompt = require('prompt-sync')();
 ff = require('node-find-folder');
 const handler = require('./Handeler')
 const validate = require('./Validate')
-console.log(settings.result_folder);
+const readlineSync = require('readline-sync');
+// console.log(settings.result_folder);
 
-var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb","--Wd","--Hi"]
+var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb","--Wd","--Hi","--nofile"]
+
+
 
 let  relevantArgvs 
 let arguments = recievedArguments()
 
-let validationErrors
 
-// default  width  and hight 
-function loadDef(hi,wd){
+function main(){
+    let enteredArgs = recievedArguments()
+    enteredArgs = preValidation(enteredArgs)
+    let ValidationErrors= validate.ValidateFolder(enteredArgs);
+    if(ValidationErrors) console.log("validation errors:",ValidationErrors)  //TODO  some error handling
+    loadDef(enteredArgs)
 
-    if (typeof relevantArgvs.Wd==='undefined') relevantArgvs['Wd']= 200;
-    if (typeof  relevantArgvs.Hi==='undefined') relevantArgvs['Hi'] =200;
-    if (typeof  relevantArgvs.Hi==='undefined' && typeof relevantArgvs.Wd!=='undefined') relevantArgvs['Hi'] =200;
-    if (typeof  relevantArgvs.Wd==='undefined' && typeof relevantArgvs.Hi!=='undefined') relevantArgvs['Hi'] =200;
-
+    if (enteredArgs.nofile)  handler.HandleArguments(enteredArgs)
+    if (!enteredArgs.nofile) handler.HandleFile(enteredArgs)
 }
 
-Menu()
+main();
+
+
+//recieves args and starts processing
+function recievedArguments(){
+
+   
+    if (process.argv.length <= 2) {
+        console.log("nothing entred");
+        process.exit(-1);
+    }
+
+    var listOfArguments = process.argv
+    var ArratToCheck = parseFromArgvs
+
+   
+  let  result={}
+    listOfArguments.forEach((val,i,arr)=>{
+          for(var j in ArratToCheck){
+            if(arr[i]===ArratToCheck[j]){
+            
+                result[arr[i].replace("--","")]=arr[i+1]
+            }
+        }
+    })
+
+  relevantArgvs =result
+
+    return result;
+}
+
+
+function preValidation(args){
+
+    if(!Boolean(args.folder))  args.folder = readlineSync.question("Type source Folder (default "+ settings.folder +"): ");
+    if(!Boolean(args.destinionFolder))  args.destinionFolder = readlineSync.question("Type destinion Folder (default "+ settings.destinionFolder +"): ");
+    // TODO: check when file is empty 
+    if(!Boolean(args.file) && !Boolean(args.nofile) )  args.folder = readlineSync.question("Type source Folder (default "+ settings.orgin+"): ");
+
+    return args;
+  
+}
+
+// default  width  and hight 
+function loadDef(args){
+
+    if (typeof args.Wd==='undefined') args['Wd']= 200;
+    if (typeof  args.Hi==='undefined') args['Hi'] =200;
+    if (typeof  args.Hi==='undefined' && typeof args.Wd!=='undefined') args['Hi'] =200;
+    if (typeof  args.Wd==='undefined' && typeof args.Hi!=='undefined') args['Hi'] =200;
+
+    return args;
+}
+
 //prints the menu options 
 //get the choose by user
 function getCLIInput(){
@@ -77,55 +133,12 @@ function Menu(){
   
                  }
              break;
-        //   case '3':
-        //   arguments = recievedArguments()
-        //   ValidationErrors= ValidateUrl(arguments)
-          
-        //         if(!ValidationErrors.length){
-              
-        //           handelWeb(arguments)
-    
-        //         }
-        //     break;
+
         default:
             console.log("all done")
     }
 
 }
 
-
-//recieves args and starts processing
-function recievedArguments(){
-
-   
-    if (process.argv.length <= 2) {
-        console.log("nothing entred");
-        process.exit(-1);
-    }
-
-    var listOfArguments = process.argv
-    var ArratToCheck = parseFromArgvs
-
-   
-  let  result={}
-    listOfArguments.forEach((val,i,arr)=>{
-          for(var j in ArratToCheck){
-            if(arr[i]===ArratToCheck[j]){
-            
-                result[arr[i].replace("--","")]=arr[i+1]
-            }
-        }
-    })
-
-  relevantArgvs =result
-
-  module.exports.relevantArgvs=relevantArgvs
-     return result;
-}
-
-module.exports={
-    Menu:Menu,
-    recievedArguments: recievedArguments,
-};
 
 

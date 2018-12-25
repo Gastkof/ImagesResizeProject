@@ -6,7 +6,7 @@ ff = require('node-find-folder');
 
 const filepath = require('filepath');
 const ifIsImage = require('if-is-image');
-const index = require('./index')
+
 
 console.log(settings.result_folder);
 
@@ -21,16 +21,15 @@ function ValidateFolder(parsedArguments){
     var filep = path.resolve(parsedArguments.folder)
     
    //=filepath.create(parsedArguments.folder)
-    console.log(filep)
-    ff = new ff(filep);
-    console.log(ff);
+
 
     for(var i in parsedArguments){
       
         if(i==="folder"){
             try {
             
-                if(fs.existsSync(filep.path.toString())){
+                if((fs.existsSync("./"+parsedArguments[i].toString()))){
+                    
 
                 }
                 else{

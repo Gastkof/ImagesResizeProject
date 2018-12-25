@@ -14,23 +14,19 @@ var ff = require('node-find-folder');
 
 console.log(settings.result_folder);
 
-const index = require('./index')
-const validate = require('./Validate')
 
-var args=index.recievedArguments
 function HandleArguments(arguments){
 
     for(var i in arguments) {
  
      try{
          //check if is the folder name
-         if(arguments[i]===arguments.folder){
+         if(arguments[i]===("orgin")){
              //check if the string entred is a folder
-             ff = new ff(arguments.folder);
-             var filep=filepath.create(ff)
+     
 
          //call a function that resize the pictures
-         CallreSize(filep.path.toString())
+         CallreSize("./"+arguments[i].toString())
          }
     }catch(e){
        // Handle error

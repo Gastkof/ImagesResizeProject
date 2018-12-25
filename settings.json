@@ -3,5 +3,8 @@
 {
     "result_folder":"./miniImages",
     "692018": "./demoFolder",
-    "tempFolder": "./respond"
+    "tempFolder": "./respond",
+    "destinionFolder": "./destination",
+    "folder":"./orgin"
+    
 }

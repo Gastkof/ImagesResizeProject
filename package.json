@@ -38,6 +38,7 @@
     "prompt-sync": "^4.1.6",
     "prompt-sync-history": "^1.0.1",
     "read-chunk": "^3.0.0",
+    "readline-sync": "^1.4.9",
     "string-to-dom": "^0.1.5",
     "switch-case": "^2.1.4",
     "validator": "^10.8.0"
