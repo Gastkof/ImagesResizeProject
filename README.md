@@ -24,32 +24,18 @@ such as:
 
 example of use :
 
-node index.js --folder origin --destinionFolder destination
+node index.js --folder origin (folder name that contains the images) --destinionFolder destination(folder name of the destination)
 
-there is a menue for user choice:
-
-for choose the options
-<br>
-1 for get a folder
-<br>
-2 for work with file
-<br>
-3 for exit
-<br>
-**********************
-<br>
-enter your chooise:
-<br>
+if enter folder name and destinionFolder without file name :
 
 
-if 1 was choosen by user :
+node index.js --folder origin  --destinionFolder destination --nofile true
 
-it will search the origin folder that contain only images files
+if needed to work with one image enter like this:
+
+ node index.js --folder origin  --destinionFolder destination --file  /*file name*/ (name.jpg) 
 
 
-if 2 was choosen by user :
-
-it will search in the origin folder the name of image 
 
 
 
