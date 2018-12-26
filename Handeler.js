@@ -1,4 +1,3 @@
-
 const Jimp =require('jimp');
 const Fakerator = require("fakerator");
 const fs = require('fs');
@@ -14,18 +13,18 @@ var ff = require('node-find-folder');
 
 console.log(settings.result_folder);
 
-
+//funcation that handek the folder arguments
 function HandleArguments(arguments){
 
     for(var i in arguments) {
  
      try{
          //check if is the folder name
-         if(arguments.folder===("orgin")){
+         if(arguments.originFolder===("orgin")){
              //check if the string entred is a folder
             
          //call a function that resize the pictures
-         CallreSize("./"+arguments.folder,arguments)
+         CallreSize("./"+arguments.originFolder,arguments)
          }
     }catch(e){
        // Handle error
@@ -57,9 +56,8 @@ function HandleFile(arguments){
            
     }
 }
-
+//the resize function  that gets path and the arguments
  function CallreSize(path,enteredArgs){
-
 
 
     fs.readdir(path, function(err, items) {
@@ -69,19 +67,11 @@ function HandleFile(arguments){
 
             //check if evrey file is an image
             if( isImage(path.toString()+"/"+items[i].toString())){
-                // var name=fakerator.names.name();
-                // const buffer = readChunk.sync(path+"/"+items[i] , 0, 12);
-                // console.log("a deo",items[i])
-                // console.log("destination argv ",enteredArgs.destinionFolder, 'all argvs',enteredArgs.relevantArgvs)
-                // console.log("this is my type",typeof enteredArgs.Wd )
-                // console.log("this a demo",name.toString()+"."+imageType(buffer).ext)
-
+                //call the resiz for every image
                 resize(path+"/"+items[i]  ,parseInt(enteredArgs.Wd),parseInt(enteredArgs.Hi),100,"./"+enteredArgs.destinionFolder+"/"+items[i]);
         
               }
-    
-              
-            
+           
             
         }
     
@@ -106,12 +96,11 @@ function FileResize(img,enteredArgs){
     console.log("got image",p);
     var name=fakerator.names.name();
 
- 
-
-
-    resize(enteredArgs.folder+"/"+p.base ,parseInt(enteredArgs.Wd),parseInt(enteredArgs.Hi),50,"./"+enteredArgs.destinionFolder+"/"+name.toString()+"."+p.ext);
+    resize(enteredArgs.originFolder+"/"+p.base ,parseInt(enteredArgs.Wd),parseInt(enteredArgs.Hi),50,"./"+enteredArgs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
+
+//export the arguments beck
 module.exports ={
     HandleArguments:HandleArguments,
     HandleFile: HandleFile,

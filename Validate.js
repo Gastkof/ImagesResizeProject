@@ -2,43 +2,32 @@ const Fakerator = require("fakerator");
 const fs = require('fs');
 const settings =require("./settings.json")
 const path = require('path');
-ff = require('node-find-folder');
-
 const filepath = require('filepath');
 const ifIsImage = require('if-is-image');
-
-
 console.log(settings.result_folder);
 
-
-
-
-
+//Validation for of folder that inserted
 function ValidateFolder(parsedArguments){
     var errorList=[]
 
     //thii is the problem
-    var filep = path.resolve(parsedArguments.folder)
-    
-   //=filepath.create(parsedArguments.folder)
-
+    var filep = path.resolve(parsedArguments.originFolder)
 
     for(var i in parsedArguments){
       
-        if(i==="folder"){
+        if(i==="originFolder"){
             try {
             
                 if((fs.existsSync("./"+parsedArguments[i].toString()))){
                     
-
                 }
                 else{
-                    console.log("source folder dosnt exist")
-                    errorList.push("source folder dosnt exist")
+                    console.log("source originFolder dosnt exist")
+                    errorList.push("source originFolder dosnt exist")
                     exit
                 }
             } catch (e) {
-                console.error(" there is no folder :",e)
+                console.error(" there is no originFolder :",e)
                 errorList.push(e)
             }
         }
@@ -46,19 +35,16 @@ function ValidateFolder(parsedArguments){
             try{
                 if(!fs.existsSync("./"+parsedArguments[i].toString())){
                     var newFolder =   fs.mkdir(parsedArguments[i])
-
                 }
 
             }
             catch (e) {
                 console.error("there is no destination folder:  ",e)
                 errorList.push(e)
-
             }
         }
      }
     return errorList
-
 }
 //validate of one argument
 function ValidateFile(ObjectResult){

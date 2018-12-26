@@ -7,7 +7,7 @@ const validate = require('./Validate')
 const readlineSync = require('readline-sync');
 // console.log(settings.result_folder);
 
-var parseFromArgvs = ["--destinionFolder","--folder","--file" , "--UrlWeb","--Wd","--Hi","--nofile"]
+var parseFromArgvs = ["--destinionFolder","--originFolder","--file" , "--UrlWeb","--Wd","--Hi","--nofile","--Help"]
 
 
 
@@ -15,7 +15,7 @@ let  relevantArgvs
 // let arguments = recievedArguments()
 main();
 
-
+//main function that deal with the arguments
 function main(){
     let enteredArgs = recievedArguments()
     enteredArgs = preValidation(enteredArgs)
@@ -28,6 +28,7 @@ function main(){
 
     if (enteredArgs.nofile)  handler.HandleArguments(enteredArgs)
     if (!enteredArgs.nofile )  handler.HandleFile(enteredArgs)
+
     
 }
 
@@ -53,6 +54,11 @@ function recievedArguments(){
             
                 result[arr[i].replace("--","")]=arr[i+1]
             }
+            if(arr[i]==="--Help"|| arr[i]==="Help"){
+
+                HelpGuide();
+            }
+
         }
     })
 
@@ -61,10 +67,10 @@ function recievedArguments(){
     return result;
 }
 
-
+//functio that recived argumets and check the them before Validation
 function preValidation(args){
 
-    if(!Boolean(args.folder))  args.folder = readlineSync.question("Type source Folder (default "+ settings.folder +"): ");
+    if(!Boolean(args.originFolder))  args.originFolder = readlineSync.question("Type source originFolder (default "+ settings.originFolder +"): ");
     if(!Boolean(args.destinionFolder))  args.destinionFolder = readlineSync.question("Type destinion Folder (default "+ settings.destinionFolder +"): ");
     // TODO: check when file is empty done
     if(!Boolean(args.file) && !Boolean(args.nofile)){console.error("no entered file and nofile ")}
@@ -74,7 +80,6 @@ function preValidation(args){
 
   else
     args.nofile=false
- 
     return args;
   
 }
@@ -90,24 +95,23 @@ function loadDef(args){
     return args;
 }
 
-//prints the menu options 
-//get the choose by user
-function getCLIInput(){
-    let menuCoice = -1;
 
-    console.log("for choose the options")
-    console.log("1 for get a folder")
-    console.log("2 for work with file")
-    console.log("3 for exit")
-    console.log("**********************")
-    menuCoice =prompt("enter your chooise:")
+//Help Guide Function
 
-    if(menuCoice === 3)  exit;
+function HelpGuide(){
+    console.log('Guide Optuions :');
 
-    if (menuCoice>0 && menuCoice < 3)   return menuCoice
+    console.log( "--originFolder , \t the origin folder that need to be enter ");
+    console.log( "--destinionFolder ,\t the destination folder that need to be enter  or if no exists creates one");
+    console.log( "--file ,\t image name that you wnat to resize or if no entered takes all folder");
+    console.log( "--nofile, \t enter true or false and not insers file name");
+    console.log( "--Wd ,\t enter true or false and not insers file name");
+    console.log( "--Hi ,\t enter true or false and not insers file name");
+    console.log( "--help ");
 
-    if(menuCoice<0)  return getCLIInput()
+    process.exit(0);
+
+
 }
-
 
 
