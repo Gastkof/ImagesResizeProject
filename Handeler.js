@@ -24,9 +24,8 @@ function HandleArguments(arguments){
          if(arguments.folder===("orgin")){
              //check if the string entred is a folder
             
-            //    console.log(baseName.base)
          //call a function that resize the pictures
-         CallreSize("./"+arguments.folder)
+         CallreSize("./"+arguments.folder,arguments)
          }
     }catch(e){
        // Handle error
@@ -46,10 +45,10 @@ function HandleFile(arguments){
 
     try{
             console.log("this",arguments[i].toString())
-            //  console.log("comparison:::::",  arguments[i]===arguments[i].toString())
+              console.log("comparison:::::",  arguments[i]===arguments[i].toString())
             const isIm= ifIsImage(arguments[i].toString());  
             if((isIm)){
-                FileResize(arguments[i].toString())
+                FileResize(arguments[i].toString(),arguments)
             }
        }catch(e){
           // Handle error
@@ -59,36 +58,35 @@ function HandleFile(arguments){
     }
 }
 
- function CallreSize(path){
+ function CallreSize(path,enteredArgs){
 
-    fs.readdir(path, function(err, from) {
 
 
     fs.readdir(path, function(err, items) {
-        // console.log(path);
-        for (var i; i<items.lengh; i++) {
-           // console.log (from[i].toString)
-            //check if evrey file is a image
-            console.log(items[i].toString())
-            if( isImage(path.toString()+"/"+items[i].toString())){
-                //var name=fakerator.names.name();
-              //  const buffer = readChunk.sync(path+"/"+from[i] , 0, 12);
-                console.log("a deo",from[i])
-                console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
-                console.log("this is my type",typeof index.relevantArgvs.Wd )
-                console.log("this a demo",name.toString()+"."+imageType(buffer).ext)
-                // resize(path+"/"+from[i]  ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+imageType(buffer).ext);
+        //  console.log(path);
 
-                resize(path+"/"+from[i]  ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),100,"./"+index.relevantArgvs.destinionFolder+"/"+from[i]);
+        for (var i=0; i<items.length; i++) {
+
+            //check if evrey file is an image
+            if( isImage(path.toString()+"/"+items[i].toString())){
+                // var name=fakerator.names.name();
+                // const buffer = readChunk.sync(path+"/"+items[i] , 0, 12);
+                // console.log("a deo",items[i])
+                // console.log("destination argv ",enteredArgs.destinionFolder, 'all argvs',enteredArgs.relevantArgvs)
+                // console.log("this is my type",typeof enteredArgs.Wd )
+                // console.log("this a demo",name.toString()+"."+imageType(buffer).ext)
+
+                resize(path+"/"+items[i]  ,parseInt(enteredArgs.Wd),parseInt(enteredArgs.Hi),100,"./"+enteredArgs.destinionFolder+"/"+items[i]);
         
               }
     
-            }
-
-    })
+              
+            
+            
+        }
     
-});}
-
+    })
+ }
 // recive  the width and hight for resize a image  
 // also the quality and the diraction path with the full name of the resize image
 function resize (from,wd,hi,qua,fileNameWithPath){
@@ -99,7 +97,7 @@ Jimp.read(from,(err,to)=>{
 }
 
 //function that resize one image at a time
-function FileResize(img){
+function FileResize(img,enteredArgs){
     
     var p1 = filepath.create(img);
     console.log("got image",p1);
@@ -107,12 +105,11 @@ function FileResize(img){
             
     console.log("got image",p);
     var name=fakerator.names.name();
-  console.log("destination argv ",index.relevantArgvs.destinionFolder, 'all argvs',index.relevantArgvs)
 
  
 
 
-    resize(index.relevantArgvs.folder+"/"+p.base ,parseInt(index.relevantArgvs.Wd),parseInt(index.relevantArgvs.Hi),50,"./"+index.relevantArgvs.destinionFolder+"/"+name.toString()+"."+p.ext);
+    resize(enteredArgs.folder+"/"+p.base ,parseInt(enteredArgs.Wd),parseInt(enteredArgs.Hi),50,"./"+enteredArgs.destinionFolder+"/"+name.toString()+"."+p.ext);
 
 }
 module.exports ={

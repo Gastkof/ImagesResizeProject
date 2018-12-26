@@ -6,7 +6,7 @@
     "tempFolder": "./respond",
     "destinionFolder": "./destination",
     "folder":"./orgin",
-    "nofile": "nofile"
+    "nofile": false
 
     
 }

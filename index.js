@@ -1,5 +1,5 @@
 
-const settings =require("./settings.json")
+let settings =require("./settings.json")
 const prompt = require('prompt-sync')();
 ff = require('node-find-folder');
 const handler = require('./Handeler')
@@ -22,10 +22,13 @@ function main(){
     let ValidationErrors= validate.ValidateFolder(enteredArgs);
 
     if(ValidationErrors)
-     console.log("validation errors:",ValidationErrors)  //TODO  some error handling
+     console.log("validation errors:",ValidationErrors)  
     loadDef(enteredArgs)
-    if (!enteredArgs.nofile)  handler.HandleArguments(enteredArgs)
-    if (enteredArgs.nofile) handler.HandleFile(enteredArgs)
+    // console.log("condition:",enteredArgs)
+
+    if (enteredArgs.nofile)  handler.HandleArguments(enteredArgs)
+    if (!enteredArgs.nofile )  handler.HandleFile(enteredArgs)
+    
 }
 
 
@@ -63,9 +66,15 @@ function preValidation(args){
 
     if(!Boolean(args.folder))  args.folder = readlineSync.question("Type source Folder (default "+ settings.folder +"): ");
     if(!Boolean(args.destinionFolder))  args.destinionFolder = readlineSync.question("Type destinion Folder (default "+ settings.destinionFolder +"): ");
-    // TODO: check when file is empty 
-  //  if(!Boolean(args.file) && !Boolean(args.nofile) )  args.nofile =null //readlineSync.question("Type source Folder (default "+ settings.nofile+"): ");
+    // TODO: check when file is empty done
+    if(!Boolean(args.file) && !Boolean(args.nofile)){console.error("no entered file and nofile ")}
+  if(!Boolean(args.file) && Boolean(args.nofile) ) {
+      args.nofile= true
+  }
 
+  else
+    args.nofile=false
+ 
     return args;
   
 }
@@ -98,47 +107,6 @@ function getCLIInput(){
     if (menuCoice>0 && menuCoice < 3)   return menuCoice
 
     if(menuCoice<0)  return getCLIInput()
-}
-//the menu function 
-function Menu(){
-
-    //activate the print menu and the choosing option
-    let choice= getCLIInput()
-
-    //by reciving a number by user 
-    switch(choice){
-        //case 1 is for working with folder
-        case '1':
-            arguments = recievedArguments()
-            ValidationErrors= validate.ValidateFolder(arguments)
-            
-            if(!ValidationErrors.length){
-                loadDef()
-
-               handler.HandleArguments(arguments)
-        
-             }
-             break;
-        //case 2 is for working with one file 
-
-        case '2':
-             arguments = recievedArguments()
-             ValidationErrors= validate.ValidateFile(arguments)
-        
-                if(!ValidationErrors.length){
-            
-                loadDef()
-
-
-               handler.HandleFile(arguments)
-  
-                 }
-             break;
-
-        default:
-            console.log("all done")
-    }
-
 }
 
 
