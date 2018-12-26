@@ -34,8 +34,10 @@ node index.js --folder origin  --destinionFolder destination --nofile true
 if needed to work with one image enter like this:
 
  node index.js --folder origin  --destinionFolder destination --file  /*file name*/ (name.jpg) 
+ 
+for enter width and height
 
-
+node index.js --folder origin  --destinionFolder destination --Wd /*default 200*/ --Hi /*default 200*/ --file  /*file name*/ (name.jpg)  
 
 
 
