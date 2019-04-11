@@ -96,7 +96,7 @@ function FileResize(img,enteredArgs){
     console.log("got image",p);
     var name=fakerator.names.name();
 
-    resize(enteredArgs.originFolder+"/"+p.base ,parseInt(enteredArgs.Wd),parseInt(enteredArgs.Hi),50,"./"+enteredArgs.destinionFolder+"/"+name.toString()+"."+p.ext);
+    resize(enteredArgs.originFolder+"/"+p.base ,parseInt(enteredArgs.Wd),parseInt(enteredArgs.Hi),50,"./"+enteredArgs.destinionFolder+"/"+p.name+p.ext);
 
 }
 
